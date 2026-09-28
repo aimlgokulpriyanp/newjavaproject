@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GrievanceTrack — Citizen Complaint Tracking with SLA Escalation</title>
+  <meta name="description" content="Municipal civic grievance portal with automated department routing, SLA deadline tracking, automatic senior officer escalation, and resolution rating.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- ================= TOP NOTICE BAR ================= -->
+  <div class="top-bar">
+    <div>🏛️ Official Municipal Civic Grievance &amp; Redressal System</div>
+    <div>Civic Toll-Free Helpline: <strong>1800-425-CIVIC (24x7)</strong> | <a href="/swagger-ui.html" target="_blank" style="color:#93c5fd; text-decoration:underline;">Swagger API Docs</a></div>
+  </div>
+
+  <!-- ================= HEADER & NAV ================= -->
+  <header class="header">
+    <div class="nav-container">
+      <div class="brand" onclick="showView('landing')">
+        <div class="brand-icon">GT</div>
+        <div>
+          <div style="line-height:1.1;">GrievanceTrack</div>
+          <span style="font-size:0.75rem; color:var(--text-muted); font-weight:500;">Municipal Redressal Portal</span>
+        </div>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><span class="nav-link" data-view="landing" onclick="showView('landing')">Home</span></li>
+          <li><span class="nav-link" data-view="submit" onclick="showView('submit')">Submit Complaint</span></li>
+          <li><span class="nav-link" data-view="track" onclick="showView('track')">Track Complaint</span></li>
+          <li><span class="nav-link" data-view="my-complaints" onclick="showView('my-complaints')">My Complaints</span></li>
+          <li><span class="nav-link" data-view="dashboard" onclick="showView('dashboard')">Citizen Dashboard</span></li>
+          <li><span class="nav-link badge-link" data-view="officer" onclick="showView('officer')">👮 Officer Portal</span></li>
+          <li><span class="nav-link badge-link" data-view="admin" onclick="showView('admin')">⚙️ Admin Portal</span></li>
+          <li><span class="nav-link" data-view="help" onclick="showView('help')">Help / SLA</span></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" onclick="toggleNotificationDrawer()" title="View Notifications" aria-label="Notifications">
+          🔔
+          <span class="notif-badge" id="notif-badge" style="display:none;">0</span>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="showView('submit')">+ File Grievance</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="main-wrapper">
+
+    <!-- ================= VIEW 1: LANDING PAGE ================= -->
+    <section id="view-landing" class="view-section active">
+      <div class="hero">
+        <div class="hero-content">
+          <div class="hero-tag">SLA-Guaranteed Civic Redressal</div>
+          <h1>Report. Track. Resolve.</h1>
+          <p>Submit your civic complaint and track its progress until resolution. Our automated SLA system ensures fast routing to departments and automatic escalation to senior supervisory officers if deadlines are breached.</p>
+          <div class="hero-buttons">
+            <button class="btn btn-primary btn-lg" onclick="showView('submit')">Submit a Complaint</button>
+            <button class="btn btn-secondary btn-lg" onclick="showView('track')">Track Complaint</button>
+            <button class="btn btn-outline btn-lg" style="color:white; border-color:rgba(255,255,255,0.4);" onclick="showView('dashboard')">View Live Dashboard</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Showcase -->
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Core System Features</h2>
+          <div class="section-subtitle">Engineered for absolute municipal transparency, accountability, and time-bound delivery.</div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="feature-card">
+          <span class="feature-num">Feature 01</span>
+          <h3>1. Easy Complaint Submission</h3>
+          <p>Simple 1-minute grievance registration with citizen details, location, and clear issue description. Receives a permanent unique tracking ID.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-num">Feature 02</span>
+          <h3>2. Department Auto-Assignment</h3>
+          <p>No manual department guesswork. The backend service layer intelligently auto-routes complaints straight to the responsible municipal department.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-num">Feature 03</span>
+          <h3>3. Real-Time Complaint Tracking</h3>
+          <p>Visual step-by-step timeline shows current progress from submission to investigation, field work, and final closure.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-num">Feature 04</span>
+          <h3>4. SLA Monitoring</h3>
+          <p>Every civic category is bound by fixed statutory resolution days stored in the database. Calculated deadlines are tracked continuously.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-num">Feature 05</span>
+          <h3>5. Automatic Escalation</h3>
+          <p>Automated background scheduler flags overdue complaints and escalates them to Senior Zonal Commissioners with audit timestamps.</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-num">Feature 06</span>
+          <h3>6. Resolution Rating</h3>
+          <p>Citizens provide 1 to 5 star ratings and qualitative feedback once resolved, holding departments accountable for work quality.</p>
+        </div>
+      </div>
+
+      <!-- Categories & Fixed SLAs -->
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Civic Categories &amp; Fixed SLAs</h2>
+          <div class="section-subtitle">Select a category below to submit a time-bound complaint directly.</div>
+        </div>
+      </div>
+
+      <div class="category-grid" id="landing-categories-grid">
+        <!-- Rendered dynamically from State.categories -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 2: CITIZEN DASHBOARD ================= -->
+    <section id="view-dashboard" class="view-section">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Citizen Grievance Dashboard</h1>
+          <div class="section-subtitle">City-wide complaint volumes, SLA compliance rates, and recent activity.</div>
+        </div>
+        <button class="btn btn-primary" onclick="showView('submit')">+ File New Complaint</button>
+      </div>
+
+      <!-- Metrics Cards -->
+      <div class="stats-strip">
+        <div class="stat-card">
+          <div class="stat-icon blue">📁</div>
+          <div class="stat-info">
+            <div class="stat-value" id="dash-total">0</div>
+            <div class="stat-label">Total Complaints</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon yellow">⏳</div>
+          <div class="stat-info">
+            <div class="stat-value" id="dash-pending">0</div>
+            <div class="stat-label">Pending Review</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon cyan">⚙️</div>
+          <div class="stat-info">
+            <div class="stat-value" id="dash-inprogress">0</div>
+            <div class="stat-label">In Progress</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div class="stat-info">
+            <div class="stat-value" id="dash-resolved">0</div>
+            <div class="stat-label">Resolved</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">⚡</div>
+          <div class="stat-info">
+            <div class="stat-value" id="dash-escalated">0</div>
+            <div class="stat-label">Escalated to Senior</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">🚨</div>
+          <div class="stat-info">
+            <div class="stat-value" id="dash-breached">0</div>
+            <div class="stat-label">SLA Breached</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Complaints Table -->
+      <div class="table-card">
+        <div class="table-toolbar">
+          <h3 style="font-size:1.1rem; font-weight:700;">Recent Citizen Grievances</h3>
+          <button class="btn btn-outline btn-sm" onclick="showView('my-complaints')">View All Complaints &rarr;</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Complaint ID</th>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Department</th>
+              <th>Status</th>
+              <th>SLA Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="citizen-recent-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: SUBMIT COMPLAINT ================= -->
+    <section id="view-submit" class="view-section">
+      <div class="form-card">
+        <div style="text-align:center; margin-bottom:2rem;">
+          <h1 class="section-title">Submit a Civic Complaint</h1>
+          <p class="section-subtitle">Fill in the details below. The system will automatically route your complaint to the relevant department with a guaranteed SLA deadline.</p>
+        </div>
+
+        <form id="submit-complaint-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="submit-name">Citizen Full Name <span class="required-star">*</span></label>
+              <input type="text" id="submit-name" placeholder="e.g. Ramesh Kumar" required>
+              <div class="field-error" id="error-name">Citizen name is required</div>
+            </div>
+            <div class="form-group">
+              <label for="submit-phone">Phone Number <span class="required-star">*</span></label>
+              <input type="tel" id="submit-phone" placeholder="e.g. 9876543210" required>
+              <div class="field-error" id="error-phone">Phone number is required</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="submit-email">Email Address <span class="required-star">*</span></label>
+            <input type="email" id="submit-email" placeholder="e.g. ramesh.kumar@example.com" required>
+            <div class="field-error" id="error-email">Please enter a valid email address</div>
+            <div class="form-hint">Status notifications and resolution updates will be sent to this email.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="submit-category">Grievance Category <span class="required-star">*</span></label>
+            <select id="submit-category" required>
+              <option value="">-- Select Category --</option>
+            </select>
+            <div class="field-error" id="error-category">Please select a category</div>
+          </div>
+
+          <!-- Auto-route department preview box -->
+          <div class="dept-preview-box" id="dept-preview-box" style="display:none;">
+            <div>
+              <div style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--primary-700);">Auto-Routed Department</div>
+              <div style="font-size:1.1rem; font-weight:700; color:var(--slate-900);" id="preview-dept-name">Roads Department</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--primary-700);">Statutory Resolution SLA</div>
+              <div style="font-size:1.1rem; font-weight:700; color:var(--primary-600);" id="preview-sla-days">3 Days</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="submit-location">Accurate Location / Landmark <span class="required-star">*</span></label>
+            <input type="text" id="submit-location" placeholder="e.g. 4th Cross, Near City Hospital, Ward 12" required>
+            <div class="field-error" id="error-location">Location details are required</div>
+          </div>
+
+          <div class="form-group">
+            <label for="submit-desc">Complaint Description <span class="required-star">*</span></label>
+            <textarea id="submit-desc" rows="4" placeholder="Describe the civic issue in detail (e.g. size of pothole, extent of water leak, hazard to traffic)..." required></textarea>
+            <div class="form-hint">
+              <span>Reasonable minimum length (10 characters)</span>
+              <span id="desc-char-count">0 / 10 min characters</span>
+            </div>
+            <div class="field-error" id="error-desc">Please enter the complaint description (at least 10 characters)</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" id="submit-btn" style="width:100%; margin-top:1rem;">Submit Grievance</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 4: TRACK COMPLAINT ================= -->
+    <section id="view-track" class="view-section">
+      <div class="track-search-card">
+        <h1 class="section-title">Track Civic Grievance Progress</h1>
+        <p class="section-subtitle">Enter your unique complaint tracking number to view real-time department status, SLA countdown, and escalation history.</p>
+        <div class="track-input-wrapper">
+          <input type="text" id="track-search-input" placeholder="Enter Complaint ID (e.g. GRV-000001)" style="font-size:1.1rem; font-weight:600; text-transform:uppercase;">
+          <button class="btn btn-primary" onclick="trackComplaintByCode()">Track Now</button>
+        </div>
+      </div>
+
+      <div id="track-results-container">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 5: MY COMPLAINTS ================= -->
+    <section id="view-my-complaints" class="view-section">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Civic Complaints Directory</h1>
+          <div class="section-subtitle">Search, filter, sort, and inspect grievances with pagination.</div>
+        </div>
+        <button class="btn btn-primary" onclick="showView('submit')">+ Submit Complaint</button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="my-search-input" placeholder="Search complaint ID, citizen, description..." oninput="handleMyComplaintsSearch(this.value)">
+          </div>
+
+          <div class="filter-group">
+            <select id="filter-status" onchange="handleMyComplaintsFilter(this.value)">
+              <option value="">All Statuses</option>
+              <option value="PENDING">Pending</option>
+              <option value="ASSIGNED">Assigned</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="RESOLVED">Resolved</option>
+              <option value="ESCALATED">Escalated</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+
+            <select id="filter-category" onchange="handleMyComplaintsCatFilter(this.value)">
+              <option value="">All Categories</option>
+            </select>
+
+            <select id="filter-sort" onchange="handleMyComplaintsSort(this.value)">
+              <option value="createdAt,desc">Created (Newest First)</option>
+              <option value="createdAt,asc">Created (Oldest First)</option>
+              <option value="slaDeadline,asc">SLA Deadline (Urgent First)</option>
+              <option value="status,asc">Status</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Complaint ID</th>
+              <th>Citizen Name</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Department</th>
+              <th>Status</th>
+              <th>SLA Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="my-complaints-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+
+        <div class="pagination">
+          <div class="pagination-info" id="my-complaints-pagination-info">Showing 0 of 0</div>
+          <div class="pagination-controls">
+            <button class="btn btn-outline btn-sm" id="my-prev-btn" onclick="prevMyPage()">Previous</button>
+            <button class="btn btn-outline btn-sm" id="my-next-btn" onclick="nextMyPage()">Next</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 6: OFFICER DASHBOARD ================= -->
+    <section id="view-officer" class="view-section">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Department Officer Portal</h1>
+          <div class="section-subtitle">Manage assigned complaints, advance valid workflow states, and fulfill civic SLAs.</div>
+        </div>
+      </div>
+
+      <!-- Officer KPI cards -->
+      <div class="stats-strip">
+        <div class="stat-card">
+          <div class="stat-icon blue">📋</div>
+          <div class="stat-info">
+            <div class="stat-value" id="off-total">0</div>
+            <div class="stat-label">Total Assigned</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon yellow">⏳</div>
+          <div class="stat-info">
+            <div class="stat-value" id="off-pending">0</div>
+            <div class="stat-label">Pending Action</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon cyan">📌</div>
+          <div class="stat-info">
+            <div class="stat-value" id="off-assigned">0</div>
+            <div class="stat-label">Assigned</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue">⚙️</div>
+          <div class="stat-info">
+            <div class="stat-value" id="off-inprogress">0</div>
+            <div class="stat-label">In Progress</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div class="stat-info">
+            <div class="stat-value" id="off-resolved">0</div>
+            <div class="stat-label">Resolved</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">⚡</div>
+          <div class="stat-info">
+            <div class="stat-value" id="off-escalated">0</div>
+            <div class="stat-label">Escalated Queue</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <h3 style="font-size:1.1rem; font-weight:700;">Active Complaint Queue</h3>
+          <div class="filter-group">
+            <select onchange="State.officerComplaints.status=this.value; loadOfficerComplaints();">
+              <option value="">All Statuses</option>
+              <option value="PENDING">Pending</option>
+              <option value="ASSIGNED">Assigned</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="ESCALATED">Escalated</option>
+              <option value="RESOLVED">Resolved</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Complaint ID</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th>SLA Deadline</th>
+              <th>SLA Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="officer-complaints-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 7: ADMIN DASHBOARD ================= -->
+    <section id="view-admin" class="view-section">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Municipal Administration &amp; Master Data</h1>
+          <div class="section-subtitle">Analytical breakdown, Category configuration with SLAs, and Department management.</div>
+        </div>
+      </div>
+
+      <!-- KPI Summary -->
+      <div class="stats-strip">
+        <div class="stat-card">
+          <div class="stat-icon blue">📁</div>
+          <div class="stat-info">
+            <div class="stat-value" id="adm-total">0</div>
+            <div class="stat-label">Total Complaints</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon yellow">⏳</div>
+          <div class="stat-info">
+            <div class="stat-value" id="adm-pending">0</div>
+            <div class="stat-label">Pending</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon cyan">⚙️</div>
+          <div class="stat-info">
+            <div class="stat-value" id="adm-inprogress">0</div>
+            <div class="stat-label">In Progress</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✓</div>
+          <div class="stat-info">
+            <div class="stat-value" id="adm-resolved">0</div>
+            <div class="stat-label">Resolved</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">⚡</div>
+          <div class="stat-info">
+            <div class="stat-value" id="adm-escalated">0</div>
+            <div class="stat-label">Escalated</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">🚨</div>
+          <div class="stat-info">
+            <div class="stat-value" id="adm-breached">0</div>
+            <div class="stat-label">SLA Breached</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Charts -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3 style="font-size:1rem; font-weight:700; margin-bottom:1rem;">📊 Complaints by Category</h3>
+          <div id="chart-categories">Loading...</div>
+        </div>
+        <div class="chart-card">
+          <h3 style="font-size:1rem; font-weight:700; margin-bottom:1rem;">📈 Complaints by Status</h3>
+          <div id="chart-statuses">Loading...</div>
+        </div>
+        <div class="chart-card">
+          <h3 style="font-size:1rem; font-weight:700; margin-bottom:1rem;">⚡ Escalations by Department</h3>
+          <div id="chart-escalations">Loading...</div>
+        </div>
+      </div>
+
+      <!-- Category Management -->
+      <div class="table-card" style="margin-bottom:2rem;">
+        <div class="table-toolbar">
+          <div>
+            <h3 style="font-size:1.1rem; font-weight:700;">Civic Categories &amp; Fixed SLAs</h3>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Configure fixed resolution turnaround days per category.</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openAddCategoryModal()">+ Add Category</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Category Name</th>
+              <th>Fixed SLA (Days)</th>
+              <th>Assigned Department</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-categories-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Department Management -->
+      <div class="table-card">
+        <div class="table-toolbar">
+          <div>
+            <h3 style="font-size:1.1rem; font-weight:700;">Municipal Departments</h3>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Manage municipal divisions and supervisory officers.</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openAddDepartmentModal()">+ Add Department</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Department Name</th>
+              <th>Supervising Officer</th>
+              <th>Official Contact / Helpline</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-departments-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Escalation Audit Trail -->
+      <div class="table-card" style="margin-top:2rem;">
+        <div class="table-toolbar">
+          <div>
+            <h3 style="font-size:1.1rem; font-weight:700;">🚨 SLA Escalation Audit Trail</h3>
+            <div style="font-size:0.8rem; color:var(--text-muted);">Automated senior officer escalation records triggered by SLA breaches.</div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="loadEscalationsTable()">🔄 Refresh Log</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Complaint Code</th>
+              <th>Senior Officer Designated</th>
+              <th>Escalated Timestamp</th>
+              <th>Escalation Reason</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-escalations-tbody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 8: HELP & SLA MATRIX ================= -->
+    <section id="view-help" class="view-section">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Help &amp; Municipal SLA Citizen Charter</h1>
+          <div class="section-subtitle">Understanding your rights, resolution timelines, and grievance escalation.</div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-bottom:2rem;">
+        <div class="detail-card">
+          <h3>🕒 Statutory SLA Rules</h3>
+          <p style="font-size:0.875rem; color:var(--text-muted); line-height:1.6;">
+            Every civic grievance has a legally binding SLA based on severity. The timer starts automatically upon submission. If work is not completed prior to the deadline, the system automatically triggers an escalation record.
+          </p>
+        </div>
+        <div class="detail-card">
+          <h3>⚡ Automatic Escalation</h3>
+          <p style="font-size:0.875rem; color:var(--text-muted); line-height:1.6;">
+            Complaints exceeding SLA are reassigned directly to Senior Zonal Commissioners. The system prevents duplicate escalations while recording the exact reason and timestamp for audit scrutiny.
+          </p>
+        </div>
+        <div class="detail-card">
+          <h3>⭐ Citizen Rating Rights</h3>
+          <p style="font-size:0.875rem; color:var(--text-muted); line-height:1.6;">
+            Once marked as RESOLVED, citizens can submit an unalterable 1 to 5 star rating with feedback. Ratings hold municipal field units accountable for long-term road and water quality.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-toolbar">
+          <h3 style="font-size:1.1rem; font-weight:700;">Municipal SLA Matrix Summary</h3>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Assigned Department</th>
+              <th>SLA Turnaround</th>
+              <th>Escalation Officer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Road</strong></td>
+              <td>Roads Department</td>
+              <td><span class="sla-chip">3 Days</span></td>
+              <td>Senior Commissioner - Roads Department</td>
+            </tr>
+            <tr>
+              <td><strong>Water</strong></td>
+              <td>Water Supply Department</td>
+              <td><span class="sla-chip">2 Days</span></td>
+              <td>Senior Commissioner - Water Supply Department</td>
+            </tr>
+            <tr>
+              <td><strong>Garbage</strong></td>
+              <td>Sanitation Department</td>
+              <td><span class="sla-chip">1 Day (Urgent)</span></td>
+              <td>Senior Commissioner - Sanitation Department</td>
+            </tr>
+            <tr>
+              <td><strong>Other</strong></td>
+              <td>General Civic Department</td>
+              <td><span class="sla-chip">5 Days</span></td>
+              <td>Senior Commissioner - General Civic Department</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= SUBMIT SUCCESS MODAL ================= -->
+  <div class="modal-backdrop" id="modal-submit-success">
+    <div class="modal-card">
+      <div class="modal-body">
+        <div class="success-card">
+          <div class="success-icon-wrap">✓</div>
+          <h2 style="font-size:1.5rem; font-weight:800; color:var(--slate-900);">Complaint Submitted Successfully</h2>
+          <p style="color:var(--text-muted); margin-top:0.5rem;">Your complaint has been logged and auto-routed to the department.</p>
+
+          <div class="complaint-code-box">
+            <div>
+              <div style="font-size:0.75rem; text-transform:uppercase; font-weight:600; color:var(--text-muted);">Complaint Tracking ID</div>
+              <div class="code-text" id="success-complaint-code">GRV-000000</div>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="copyToClipboard(document.getElementById('success-complaint-code').textContent)">📋 Copy</button>
+          </div>
+
+          <div class="info-list" style="text-align:left; background:var(--slate-50); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color); margin-bottom:1.5rem;">
+            <div class="info-item">
+              <div class="info-label">Assigned Department</div>
+              <div class="info-val" id="success-dept-name">Roads Department</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">SLA Turnaround</div>
+              <div class="info-val" id="success-sla-days">3 Days</div>
+            </div>
+            <div class="info-item" style="grid-column: span 2;">
+              <div class="info-label">Expected Resolution By</div>
+              <div class="info-val" id="success-deadline">DATE</div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.75rem; justify-content:center;">
+            <button class="btn btn-primary" onclick="closeModal('modal-submit-success'); showView('track', document.getElementById('success-complaint-code').textContent);">Track Progress Now</button>
+            <button class="btn btn-outline" onclick="closeModal('modal-submit-success'); showView('dashboard');">Go to Dashboard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= OFFICER STATUS UPDATE MODAL ================= -->
+  <div class="modal-backdrop" id="modal-update-status">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Update Complaint Status</h3>
+        <button class="close-btn" onclick="closeModal('modal-update-status')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; justify-content:space-between; margin-bottom:1.25rem;">
+          <div>
+            <div class="info-label">Complaint Code</div>
+            <strong id="modal-update-code" style="font-size:1.1rem; color:var(--primary-600);">GRV-000000</strong>
+          </div>
+          <div>
+            <div class="info-label">Current Status</div>
+            <span id="modal-current-status">PENDING</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="modal-target-status">New Status (Enforcing Valid Transitions) <span class="required-star">*</span></label>
+          <select id="modal-target-status" required>
+            <!-- Populated dynamically with allowedNextStatuses -->
+          </select>
+          <div class="form-hint">Invalid transitions are blocked by the backend service.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="modal-update-officer">Officer Name / Handler</label>
+          <input type="text" id="modal-update-officer" placeholder="e.g. Ward Engineer">
+        </div>
+
+        <div class="form-group">
+          <label for="modal-update-remarks">Action Remarks / Resolution Notes</label>
+          <textarea id="modal-update-remarks" rows="3" placeholder="Enter inspection details, crew dispatched, or resolution report..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-update-status')">Cancel</button>
+        <button class="btn btn-primary" id="modal-update-submit-btn" onclick="handleStatusUpdateSubmit()">Confirm Status Transition</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CATEGORY ADD/EDIT MODAL ================= -->
+  <div class="modal-backdrop" id="modal-category">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-cat-title">Add Category</h3>
+        <button class="close-btn" onclick="closeModal('modal-category')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="modal-cat-id">
+        <div class="form-group">
+          <label for="modal-cat-name">Category Name <span class="required-star">*</span></label>
+          <input type="text" id="modal-cat-name" placeholder="e.g. Streetlights, Drainage">
+        </div>
+        <div class="form-group">
+          <label for="modal-cat-sla">Fixed Resolution SLA (Days) <span class="required-star">*</span></label>
+          <input type="number" id="modal-cat-sla" min="1" max="30" value="3">
+          <div class="form-hint">Must be a positive integer stored in Category table.</div>
+        </div>
+        <div class="form-group">
+          <label for="modal-cat-dept">Assigned Department <span class="required-star">*</span></label>
+          <select id="modal-cat-dept"></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-category')">Cancel</button>
+        <button class="btn btn-primary" onclick="handleSaveCategory()">Save Category</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DEPARTMENT ADD/EDIT MODAL ================= -->
+  <div class="modal-backdrop" id="modal-department">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-dept-title">Add Department</h3>
+        <button class="close-btn" onclick="closeModal('modal-department')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="modal-dept-id">
+        <div class="form-group">
+          <label for="modal-dept-name">Department Name <span class="required-star">*</span></label>
+          <input type="text" id="modal-dept-name" placeholder="e.g. Electrical &amp; Energy Department">
+        </div>
+        <div class="form-group">
+          <label for="modal-dept-officer">Supervising Officer Name <span class="required-star">*</span></label>
+          <input type="text" id="modal-dept-officer" placeholder="e.g. Executive Engineer S. Patel">
+        </div>
+        <div class="form-group">
+          <label for="modal-dept-contact">Official Helpline / Contact <span class="required-star">*</span></label>
+          <input type="text" id="modal-dept-contact" placeholder="e.g. electrical@civicgov.org / +91-9876543210">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-department')">Cancel</button>
+        <button class="btn btn-primary" onclick="handleSaveDepartment()">Save Department</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= NOTIFICATION DRAWER ================= -->
+  <div class="drawer-backdrop" id="drawer-backdrop" onclick="toggleNotificationDrawer()"></div>
+  <aside class="drawer" id="notification-drawer">
+    <div class="drawer-header">
+      <h3 style="font-size:1.1rem; font-weight:700;">🔔 In-App Notifications</h3>
+      <button class="close-btn" onclick="toggleNotificationDrawer()">&times;</button>
+    </div>
+    <div style="padding:0.75rem 1.5rem; background:var(--slate-50); border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:0.8rem; color:var(--text-muted);">Real-time status changes &amp; escalations</span>
+      <button class="btn btn-outline btn-sm" onclick="markAllNotificationsAsRead()">Mark all as read</button>
+    </div>
+    <div class="drawer-body" id="drawer-notifications-body">
+      <!-- Dynamically populated -->
+    </div>
+  </aside>
+
+  <!-- ================= TOAST CONTAINER ================= -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <div style="font-weight:700; color:white; font-size:1.1rem; margin-bottom:0.75rem;">GrievanceTrack</div>
+        <p style="font-size:0.8125rem; line-height:1.6;">Citizen Complaint Tracking with Automated SLA Escalation System for Municipal Governance and Public Civic Services.</p>
+      </div>
+      <div>
+        <div style="font-weight:700; color:white; margin-bottom:0.75rem;">Citizen Services</div>
+        <p><a href="#" onclick="showView('submit'); return false;">Submit Civic Grievance</a></p>
+        <p><a href="#" onclick="showView('track'); return false;">Track Complaint ID</a></p>
+        <p><a href="#" onclick="showView('my-complaints'); return false;">Complaints Directory</a></p>
+        <p><a href="#" onclick="showView('help'); return false;">SLA Citizen Charter</a></p>
+      </div>
+      <div>
+        <div style="font-weight:700; color:white; margin-bottom:0.75rem;">Administrative</div>
+        <p><a href="#" onclick="showView('officer'); return false;">Officer Portal</a></p>
+        <p><a href="#" onclick="showView('admin'); return false;">Admin &amp; Category SLAs</a></p>
+        <p><a href="/swagger-ui.html" target="_blank">Swagger OpenAPI Explorer</a></p>
+        <p><a href="/h2-console" target="_blank">H2 Database Console</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Municipal Grievance Redressal Authority. Built with Spring Boot 3.3, MySQL, Spring Data JPA, REST APIs, and SLA Automation.
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
